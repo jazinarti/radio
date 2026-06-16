@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>راديو أرض السعودية | البث المباشر</title>
+    <!-- تضمين مكتبة الأيقونات FontAwesome ومكتبة المشغل -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
     
     <style>
         :root {
-            --primary-color: #00e676;
-            --primary-glow: rgba(0, 230, 118, 0.4);
-            --bg-gradient: linear-gradient(135deg, #0d1b15 0%, #070f0b 100%);
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(255, 255, 255, 0.08);
+            --primary-color: #00b359;
+            --primary-glow: rgba(0, 179, 89, 0.2);
+            --bg-gradient: linear-gradient(135deg, #f4f7f5 0%, #e8efe9 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 179, 89, 0.15);
+            --text-main: #1e2925;
+            --text-sub: #5c6f68;
         }
 
         * {
@@ -25,24 +28,24 @@
 
         body {
             background: var(--bg-gradient);
-            color: #ffffff;
+            color: var(--text-main);
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden;
+            padding: 20px 0;
         }
 
         /* الكرت الرئيسي */
         .player-card {
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--card-border);
-            padding: 40px 30px;
+            padding: 35px 25px 25px;
             border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 15px 35px rgba(0, 60, 30, 0.08), 0 5px 15px rgba(0, 0, 0, 0.04);
             width: 90%;
             max-width: 380px;
             text-align: center;
@@ -54,46 +57,43 @@
             transform: translateY(-5px);
         }
 
-        /* صورة/أيقونة الراديو الفخمة */
+        /* ديرة أيقونة الراديو الفخمة */
         .logo-area {
-            width: 140px;
-            height: 140px;
-            background: linear-gradient(135deg, #11291f 0%, #08140f 100%);
-            border: 2px solid var(--card-border);
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #ffffff 0%, #edf5f0 100%);
+            border: 1px solid var(--card-border);
             border-radius: 50%;
-            margin: 0 auto 25px;
+            margin: 0 auto 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            position: relative;
+            box-shadow: 0 8px 20px rgba(0, 179, 89, 0.1);
         }
 
         .logo-area i {
-            font-size: 55px;
+            font-size: 45px;
             color: var(--primary-color);
-            text-shadow: 0 0 15px var(--primary-glow);
+            text-shadow: 0 4px 10px var(--primary-glow);
         }
 
-        /* النصوص */
+        /* النصوص والعناوين */
         h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-            background: linear-gradient(to left, #ffffff, #a3b8cc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-main);
+            margin-bottom: 6px;
         }
 
         .status-text {
-            font-size: 14px;
-            color: #8899a6;
-            margin-bottom: 30px;
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-bottom: 25px;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
+            font-weight: 500;
         }
 
         .status-dot {
@@ -101,6 +101,7 @@
             height: 8px;
             background-color: #ff3d00;
             border-radius: 50%;
+            transition: all 0.3s ease;
         }
 
         /* تموجات الصوت المتحركة */
@@ -108,9 +109,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 4px;
-            height: 30px;
-            margin-bottom: 35px;
+            gap: 5px;
+            height: 25px;
+            margin-bottom: 30px;
         }
 
         .wave-bar {
@@ -118,11 +119,13 @@
             height: 5px;
             background-color: var(--primary-color);
             border-radius: 2px;
-            transition: height 0.2s ease;
+            opacity: 0.4;
+            transition: height 0.2s ease, opacity 0.2s ease;
         }
 
         /* حركة الأمواج عند التشغيل */
         .playing .wave-bar {
+            opacity: 1;
             animation: pulse 1.2s ease-in-out infinite alternate;
         }
         .playing .wave-bar:nth-child(2) { animation-delay: 0.2s; }
@@ -132,43 +135,125 @@
 
         @keyframes pulse {
             0% { height: 5px; }
-            100% { height: 30px; cubic-bezier(0.45, 0.05, 0.55, 0.95) }
+            100% { height: 25px; }
         }
 
-        /* أزرار التحكم الدائرية المخصصة */
+        /* أزرار التحكم */
         .controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 30px;
         }
 
         .btn-play {
-            width: 80px;
-            height: 80px;
-            background: var(--primary-color);
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, #00cc66 0%, #00994d 100%);
             border: none;
             border-radius: 50%;
-            color: #000000;
-            font-size: 28px;
+            color: #ffffff;
+            font-size: 26px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 8px 25px var(--primary-glow);
+            box-shadow: 0 6px 20px rgba(0, 179, 89, 0.4);
             transition: all 0.3s ease;
         }
 
         .btn-play:hover {
-            transform: scale(1.08);
-            box-shadow: 0 10px 30px var(--primary-color);
+            transform: scale(1.06);
+            box-shadow: 0 8px 25px rgba(0, 179, 89, 0.5);
         }
 
         .btn-play:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
         }
 
-        /* إخفاء مشغل فيديو جي إس الافتراضي للحفاظ على التصميم المخصص */
+        /* خط فاصل */
+        .divider {
+            height: 1px;
+            background: linear-gradient(to left, transparent, rgba(0, 0, 0, 0.06), transparent);
+            margin-bottom: 20px;
+        }
+
+        /* أزرار تحميل التطبيقات */
+        .apps-section {
+            margin-bottom: 20px;
+        }
+
+        .apps-title {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .apps-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .app-btn {
+            flex: 1;
+            max-width: 140px;
+            background: #1e2925;
+            color: #ffffff;
+            padding: 8px 10px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .app-btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 179, 89, 0.2);
+        }
+
+        .app-btn i {
+            font-size: 20px;
+        }
+
+        .app-btn-text {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-btn-text .small {
+            font-size: 8px;
+            opacity: 0.7;
+        }
+
+        .app-btn-text .bold {
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* قسم الحقوق */
+        .copyright {
+            font-size: 11px;
+            color: var(--text-sub);
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .copyright a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* إخفاء مشغل فيديو جي إس الافتراضي */
         .video-js {
             display: none !important;
         }
@@ -177,17 +262,20 @@
 <body>
 
 <div class="player-card" id="card">
+    <!-- الأيقونة العلوية -->
     <div class="logo-area">
         <i class="fa-solid fa-radio"></i>
     </div>
     
+    <!-- عناوين الراديو -->
     <h1>راديو أرض السعودية</h1>
     
     <div class="status-text">
         <div class="status-dot" id="dot"></div>
-        <span id="status-label">مظفأ</span>
+        <span id="status-label">مغلق الآن</span>
     </div>
 
+    <!-- خطوط موجات الصوت البصرية -->
     <div class="wave-container" id="wave-box">
         <div class="wave-bar"></div>
         <div class="wave-bar"></div>
@@ -196,17 +284,50 @@
         <div class="wave-bar"></div>
     </div>
     
+    <!-- زر التشغيل -->
     <div class="controls">
         <button class="btn-play" id="play-trigger" onclick="togglePlayback()">
             <i class="fa-solid fa-play" id="icon-state" style="margin-right: 4px;"></i>
         </button>
     </div>
 
+    <div class="divider"></div>
+
+    <!-- روابط تحميل التطبيقات -->
+    <div class="apps-section">
+        <div class="apps-title">تحميل تطبيق أرض السعودية</div>
+        <div class="apps-buttons">
+            <!-- رابط الآيفون -->
+            <a href="https://apps.apple.com/sa/app/id6742659162" target="_blank" class="app-btn">
+                <i class="fa-fab fa-apple"></i>
+                <div class="app-btn-text">
+                    <span class="small">متوفر على</span>
+                    <span class="bold">App Store</span>
+                </div>
+            </a>
+            <!-- رابط الأندرويد -->
+            <a href="https://play.google.com/store/apps/details?id=com.saudiearth.messagingapp&pli=1" target="_blank" class="app-btn">
+                <i class="fa-brands fa-google-play"></i>
+                <div class="app-btn-text">
+                    <span class="small">تحميل من</span>
+                    <span class="bold">Google Play</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- الحقوق -->
+    <div class="copyright">
+        &copy; جميع الحقوق محفوظة لـ <a href="https://saudiearth.com" target="_blank">أرض السعودية</a>
+    </div>
+
+    <!-- المشغل المخفي المسؤول عن تشغيل الصوت -->
     <audio id="my-audio" class="video-js" preload="auto">
         <source src="https://saudiearth.com/radio/radio.m3u" type="application/x-mpegURL">
     </audio>
 </div>
 
+<!-- ملفات مكتبة التشغيل والتحكم الذكي -->
 <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
 <script>
     var player = videojs('my-audio');
@@ -225,9 +346,9 @@
             iconState.className = "fa-solid fa-pause";
             iconState.style.marginRight = "0px";
             waveBox.classList.add('playing');
-            dot.style.backgroundColor = "#00e676";
-            dot.style.boxShadow = "0 0 10px #00e676";
-            statusLabel.innerText = "بث مباشر آمن المظهر";
+            dot.style.backgroundColor = "#00b359";
+            dot.style.boxShadow = "0 0 8px rgba(0, 179, 89, 0.6)";
+            statusLabel.innerText = "بث مباشر يعمل الآن";
         } else {
             player.pause();
             isPlaying = false;
@@ -236,7 +357,7 @@
             waveBox.classList.remove('playing');
             dot.style.backgroundColor = "#ff3d00";
             dot.style.boxShadow = "none";
-            statusLabel.innerText = "مطفأ";
+            statusLabel.innerText = "مغلق الآن";
         }
     }
 </script>
